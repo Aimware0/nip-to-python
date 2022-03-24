@@ -656,3 +656,4 @@ NTIPAliasStat["shortparam1"]="355"
 NTIPAliasStat["questitemdifficulty"]="356"
 NTIPAliasStat["passivemagmastery"]="357"
 NTIPAliasStat["passivemagpierce"]="358"
+

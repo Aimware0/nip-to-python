@@ -1304,3 +1304,4 @@ NTIPAliasClassID["fed"]="657"
 NTIPAliasClassID["festeringessenceofdestruction"]="657"
 NTIPAliasClassID["std"]="658"
 NTIPAliasClassID["standardofheroes"]="658"
+

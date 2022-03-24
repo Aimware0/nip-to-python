@@ -7,3 +7,4 @@ NTIPAliasQuality["set"]="5"
 NTIPAliasQuality["rare"]="6"
 NTIPAliasQuality["unique"]="7"
 NTIPAliasQuality["crafted"]="8"
+

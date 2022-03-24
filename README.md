@@ -1,1 +1,1 @@
-# nip-to-python
+# Transpiles nip code into python code

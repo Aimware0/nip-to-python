@@ -7,12 +7,12 @@ from NTIPAliasType import NTIPAliasType
 
 from tokens import Token, TokenType
 from enum import Enum
+
 WHITESPACE = " \t\n\r\v\f"
 DIGITS = "0123456789."
-SYMBOLS = [">", "=> ", "<", "<=", "=", "!", "(", ")", ",", "&", "|"]
+SYMBOLS = [">", "=> ", "<", "<=", "=", "!", "(", ")", ",", "&", "|", "#"]
 MATH_SYMBOLS = ["^", "*", "/", "\\", "+", "-"]
 CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
-
 
 class Lexer:
     def __init__(self, nip_expression):
@@ -168,6 +168,8 @@ class Lexer:
                 if self.current_token == "&":
                     self.advance()
                     return Token(TokenType.AND, "and")
+            elif char == "#":
+                return Token(TokenType.AND, "and")
             elif char == "|":
                 if self.current_token == "|":
                     self.advance()
@@ -175,10 +177,9 @@ class Lexer:
             else:
                 print("Unknown operator")
                 break
-        char = self.current_token
         self.advance()
 
-txt = "[name] == ring"
+txt = "[name] == ring # [vitality] == 5"
 lexer = Lexer(txt)
 tokens = list(lexer.create_tokens())
 print(tokens)

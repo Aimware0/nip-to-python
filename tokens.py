@@ -40,6 +40,8 @@ class TokenType(Enum):
     WHITESPACE =          32
     COMMENT =             33
 
+    UNKNOWN =             34
+
 
 
 @dataclass

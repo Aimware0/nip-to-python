@@ -13,107 +13,45 @@ import json
 
 
 item_data = json.loads("""{
-  "Name": "War Traveler",
-  "Quality": "unique",
-  "Text": "WAR TRAVELER|BATTLE BOOTS|DEFENSE: 139|DURABILITY: 13 OF 48|REQUIRED STRENGTH: 95|REQUIRED LEVEL: 42|+25% FASTER RUN/WALK|ADDS 15-25 DAMAGE|+190% ENHANCED DEFENSE|+10 TO STRENGTH|+10 TO VITALITY|40% SLOWER STAMINA DRAIN|ATTACKER TAKES DAMAGE OF 10|50% BETTER CHANCE OF GETTING MAGIC ITEMS",
-  "BaseItem": {
-    "DisplayName": "Battle Boots",
-    "NTIPAliasClassID": 388,
-    "NTIPAliasType": 15,
-    "NTIPAliasStatProps": {
-      "31": {
-        "min": 39,
-        "max": 47
-      },
-      "72": 18,
-      "73": 18,
-      "0x400000": {
-        "min": 0,
-        "max": 1
-      }
+    "Name": "RUNE LOOP",
+    "Quality": "rare",
+    "Text": "RUNE LOOP|RING|REQUIRED LEVEL: 15|+1 TO MAXIMUM DAMAGE|3% LIFE STOLEN PER HIT|+5 TO STRENGTH|COLD RESIST +11%|FIRE RESIST +23%|9% BETTER CHANCE OF GETTING MAGIC ITEMS",
+    "BaseItem":
+    {
+        "DisplayName": "Ring",
+        "NTIPAliasClassID": 522,
+        "NTIPAliasType": 10,
+        "dimensions": [1, 1],
+        "sets": ["ANGELICHALO", "CATHANSSEAL"],
+        "uniques": ["NAGELRING", "MANALDHEAL", "THESTONEOFJORDAN", "CONSTRICTINGRING", "BULKATHOSWEDDINGBAND", "DWARFSTAR", "RAVENFROST", "NATURESPEACE", "WISPPROJECTOR", "CARRIONWIND"]
     },
-    "dimensions": [
-      2,
-      2
-    ],
-    "sets": [
-      "ALDURSADVANCE"
-    ],
-    "uniques": [
-      "WARTRAVELER"
-    ],
-    "NTIPAliasClass": 1
-  },
-  "Item": {
-    "DisplayName": "War Traveler",
-    "NTIPAliasClassID": 388,
-    "NTIPAliasType": 15,
-    "NTIPAliasStatProps": {
-      "0": {
-        "min": 10,
-        "max": 10
-      },
-      "3": {
-        "min": 10,
-        "max": 10
-      },
-      "21": 15,
-      "22": 25,
-      "72": 30,
-      "73": 30,
-      "78": {
-        "min": 5,
-        "max": 10
-      },
-      "80": {
-        "min": 30,
-        "max": 50
-      },
-      "96": {
-        "min": 25,
-        "max": 25
-      },
-      "154": {
-        "min": 40,
-        "max": 40
-      },
-      "16,0": {
-        "min": 150,
-        "max": 190
-      }
+    "Item": null,
+    "NTIPAliasType": 10,
+    "NTIPAliasClassID": 522,
+    "NTIPAliasClass": null,
+    "NTIPAliasQuality": 6,
+    "NTIPAliasStat":
+    {
+        "43": 11,
+        "39": 23,
+        "80": 9,
+        "22": 1,
+        "0": 5,
+        "60": 3
+    },
+    "NTIPAliasFlag":
+    {
+        "0x10": true,
+        "0x4000000": false,
+        "0x400000": true
     }
-  },
-  "NTIPAliasType": 15,
-  "NTIPAliasClassID": 388,
-  "NTIPAliasClass": null,
-  "NTIPAliasQuality": 7,
-  "NTIPAliasStat": {
-    "0": 10,
-    "3": 10,
-    "16": 190,
-    "21": 15,
-    "22": 25,
-    "31": 139,
-    "72": 13,
-    "73": 48,
-    "78": 10,
-    "80": 50,
-    "96": 25,
-    "154": 40
-  },
-  "NTIPAliasFlag": {
-    "0x10": true,
-    "0x4000000": false
-  }
 }""")
-
-
 
 WHITESPACE = " \t\n\r\v\f"
 DIGITS = "0123456789.%"
-SYMBOLS = [">", "=> ", "<", "<=", "=", "!", "(", ")", ",", "&", "|", "#", "/"]
+SYMBOLS = [">", "=> ", "<", "<=", "=", "!", "", "", ",", "&", "|", "#", "/"]
 MATH_SYMBOLS = ["(", ")", "^", "*", "/", "\\", "+", "-"]
-CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
+CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_'"
 
 class Lexer:
     def __init__(self, nip_expression):
@@ -137,12 +75,12 @@ class Lexer:
                 yield self.create_logical_operator()
             elif self.current_token in MATH_SYMBOLS:
                 yield self.create_math_operator()
-                self.advance()
+                # self.advance()
             elif self.current_token == "[":
                 yield self.create_nip_lookup()
             elif self.current_token in CHARS:
                 yield self.create_d2r_image_data_lookup()
-
+        
     def create_digits(self):
         dot_count = 0
         n_str = self.current_token
@@ -152,7 +90,6 @@ class Lexer:
                 if dot_count >= 1:
                     break
                 dot_count += 1
-
             n_str += self.current_token
             
             if self.current_token == "%":
@@ -173,7 +110,18 @@ class Lexer:
     def create_math_operator(self):
         symbol = self.current_token
         self.advance()
-        while self.current_token != None:
+
+        symbol_map = {
+            '+': TokenType.PLUS,
+            '-': TokenType.MINUS,
+            '*': TokenType.MULTIPLY,
+            '/': TokenType.DIVIDE,
+            '\\': TokenType.MODULO,
+            '^': TokenType.POW
+        }
+
+        while self.current_token != None:            
+
             if symbol == "+":
                 return Token(TokenType.PLUS, symbol)
             elif symbol == "-":
@@ -190,6 +138,12 @@ class Lexer:
                 return Token(TokenType.LPAREN, symbol)
             elif symbol == ")":
                 return Token(TokenType.RPAREN, symbol)
+
+        if symbol == "(":
+            return Token(TokenType.LPAREN, symbol)
+        elif symbol == ")":
+            return Token(TokenType.RPAREN, symbol)
+ 
             
     def create_nip_lookup(self):
         self.advance()
@@ -197,6 +151,7 @@ class Lexer:
 
         while self.current_token != None:
             self.advance()
+
             if self.current_token == "]":
                 break
             lookup_key += self.current_token
@@ -227,6 +182,8 @@ class Lexer:
             return Token(TokenType.NTIPAliasStat, NTIPAliasStat[lookup_key])
         elif lookup_key in NTIPAliasType:
             return Token(TokenType.NTIPAliasType, NTIPAliasType[lookup_key])
+        else:
+            return Token(TokenType.UNKNOWN, "-1")
         
     def create_d2r_image_data_lookup(self):
         lookup_key = self.current_token
@@ -235,6 +192,9 @@ class Lexer:
             self.advance()
             if self.current_token == None or self.current_token not in CHARS:
                 break
+            
+            if self.current_token == "'":
+                self.current_token = "\\'" # TODO FIX THIS (make stuff like diablo'shorn work..)
             lookup_key += self.current_token
 
         # Converts stuff like ethereal to NTIPAliasFlag['ethereal']
@@ -250,11 +210,15 @@ class Lexer:
             return Token(TokenType.NTIPAliasStat, lookup_key)
         elif lookup_key in NTIPAliasType:
             return Token(TokenType.NTIPAliasType, lookup_key)
+        else:
+            return Token(TokenType.UNKNOWN, "-1")
+
 
     def create_logical_operator(self):
         char = self.current_token
         self.advance()
         while self.current_token != None:
+            
             if char == ">":
                 if self.current_token == "=":
                     self.advance()
@@ -289,103 +253,137 @@ class Lexer:
                 if self.current_token == "/":
                     self.advance()
                     return Token(TokenType.COMMENT, "") # We don't really need comments in the transpiled version...
+                else:
+                    return Token(TokenType.DIVIDE, "/")
             else:
-                print("Unknown operator", char)
+                # print("Unknown operator", char)
                 break
         
         if char == "#":
             return Token(TokenType.AND, "and")
-        elif char == "(":
-            return Token(TokenType.LPAREN, char)
-        elif char == ")":
-            return Token(TokenType.RPAREN, char)
 
         self.advance()
 
+class Transpiler:
+    def transpile(self, tokens):
+        expression = ""
+        for i, token in enumerate(tokens):
+            if token == None:
+                continue
+            if token.type == TokenType.NTIPAliasStat:
+                if len(tokens) >= i + 2 and tokens[i + 2].type == TokenType.NUMBERPERCENT: # Look at the other side of the comparsion.
+                    # Write an expression to test make sure the item_data['Item']['NTIPAliasStatProps'] is a dict.
+                    stat_value = f"(item_data['NTIPAliasStat']['{token.value}'])"
+                    stat_min_max = f"(item_data['Item']['NTIPAliasStatProps']['{token.value}'])"
 
-
-def transpile(tokens):
-    expression = ""
-    for i, token in enumerate(tokens):
-        if token == None:
-            continue
-        if token.type == TokenType.NTIPAliasStat:
-            if len(tokens) >= 2 and tokens[i + 2].type == TokenType.NUMBERPERCENT: # Look at the other side of the comparsion.
-                stat_value = f"(item_data['NTIPAliasStat']['{token.value}'])"
-                stat_min_max = f"(item_data['Item']['NTIPAliasStatProps']['{token.value}'])"
-                expression += f"(int(({stat_value} - {stat_min_max}['min']) * 100.0 / ({stat_min_max}['max'] - {stat_min_max}['min'])))"
-            else:
-                stat_value = f"(item_data['NTIPAliasStat']['{token.value}'])"
-                stat_min_max = f"(item_data['Item']['NTIPAliasStatProps']['{token.value}'])"
-                # clamp value between min and max
-                expression += f"((({stat_value} >= {stat_min_max}['max'] and {stat_min_max}['max']) or ({stat_value} <= {stat_min_max}['min'] and {stat_min_max}['min']) or {stat_value}))"
-
-                expression += f"(int(item_data['NTIPAliasStat']['{token.value}']))"
-        elif token.type == TokenType.NTIPAliasClass:
-            expression += f"(NTIPAliasClass['{token.value}'])"
-        elif token.type == TokenType.NTIPAliasQuality:
-            expression += f"(NTIPAliasQuality['{token.value}'])"
-        elif token.type == TokenType.NTIPAliasClassID:
-            expression += f"(NTIPAliasClassID['{token.value}'])"
-        elif token.type == TokenType.NTIPAliasFlag:
-            pass
-            # we don't need the flag value here, it's used below
-            # expression += f"NTIPAliasFlag['{token.value}']"
-        elif token.type == TokenType.NTIPAliasType:
-            expression += f"(int(NTIPAliasType['{token.value}']))"
-        elif token.type == TokenType.NAME:
-            expression += "(int(item_data['NTIPAliasClassID']))"
-        elif token.type == TokenType.CLASS:
-            expression += "(int(item_data['NTIPAliasClass']))"
-        elif token.type == TokenType.QUALITY:
-            expression += "(int(item_data['NTIPAliasQuality']))"
-        elif token.type == TokenType.FLAG:
-            if tokens[i + 2].type == TokenType.NTIPAliasFlag: 
-                expression += f"(item_data['NTIPAliasFlag']['{NTIPAliasFlag[tokens[i + 2].value]}'])"
-            # Check if the flag we're looking for (i.e ethereal) is i + 2 away from here, if it is, grab it's value (0x400000) and place it inside the lookup.
-        elif token.type == TokenType._TYPE:
-            expression += "(int(item_data['NTIPAliasType']))"
-        
-        elif token.type == TokenType.EQ:
-            if tokens[i +1].type != TokenType.NTIPAliasFlag:
-                expression += "=="
-        elif token.type == TokenType.NE:
-            if tokens[i +1].type != TokenType.NTIPAliasFlag:
-                expression += "!="
-        elif token.type == TokenType.GT:
-            if tokens[i +1].type != TokenType.NTIPAliasFlag:
-                expression += ">"
-        elif token.type == TokenType.LT:
-            if tokens[i +1].type != TokenType.NTIPAliasFlag:
-                expression += "<"
-        elif token.type == TokenType.GE:
-            if tokens[i +1].type != TokenType.NTIPAliasFlag:
-                expression += ">="
-        elif token.type == TokenType.LE:
-            if tokens[i +1].type != TokenType.NTIPAliasFlag:
-                expression += "<="
-        elif token.type == TokenType.NUMBERPERCENT:
-            expression += f"int({token.value})"
-        else:
-            expression += f"{token.value}"
+                    is_dict = eval(f"isinstance({stat_min_max}, dict)") # ghetto, but for now, ok..
+                    if is_dict:
+                        expression += f"(int(({stat_value} - {stat_min_max}['min']) * 100.0 / ({stat_min_max}['max'] - {stat_min_max}['min'])))"
+                    else:
+                        expression += f"(int(-1))" # Ignore it since it wasn't a dict and the user tried to use a %
+                else:
+                    # stat_value = f"(item_data['NTIPAliasStat']['{token.value}'])"
+                    # stat_min_max = f"(item_data['Item']['NTIPAliasStatProps']['{token.value}'])"
+                    # clamp value between min and max
             
-        expression += "" # add space if spaces are needed
-    return expression
+                    # expression += f"(({stat_value} >= {stat_min_max}['max'] and {stat_min_max}['max']) or ({stat_value} <= {stat_min_max}['min'] and {stat_min_max}['min']) or {stat_value})"
+                    # expression += f"(int(item_data['NTIPAliasStat']['{token.value}']))"
+                    expression += f"(int(item_data['NTIPAliasStat'].get('{token.value}', -1)))"
+            elif token.type == TokenType.NTIPAliasClass:
+                expression += f"(int(NTIPAliasClass['{token.value}']))"
+            elif token.type == TokenType.NTIPAliasQuality:
+                expression += f"(int(NTIPAliasQuality['{token.value}']))"
+            elif token.type == TokenType.NTIPAliasClassID:
+                expression += f"(int(NTIPAliasClassID['{token.value}']))"
+            elif token.type == TokenType.NTIPAliasFlag:
+                pass
+                # we don't need the flag value here, it's used below
+                # expression += f"NTIPAliasFlag['{token.value}']"
+            elif token.type == TokenType.NTIPAliasType:
+                expression += f"(int(NTIPAliasType['{token.value}']))"
+            elif token.type == TokenType.NAME:
+                expression += "(int(item_data['NTIPAliasClassID']))"
+            elif token.type == TokenType.CLASS:
+                expression += "(int(item_data['NTIPAliasClass']))"
+            elif token.type == TokenType.QUALITY:
+                expression += "(int(item_data['NTIPAliasQuality']))"
+            elif token.type == TokenType.FLAG:
+                if tokens[i + 2].type == TokenType.NTIPAliasFlag: 
+                    condition_type = tokens[i + 1]
+                    print(condition_type)
+                    if condition_type.type == TokenType.EQ:
+                        expression += f"(item_data['NTIPAliasFlag']['{NTIPAliasFlag[tokens[i + 2].value]}'])"
+                    elif condition_type.type == TokenType.NE:
+                        expression += f"(not item_data['NTIPAliasFlag']['{NTIPAliasFlag[tokens[i + 2].value]}'])"
+                # Check if the flag we're looking for (i.e ethereal) is i + 2 away from here, if it is, grab it's value (0x400000) and place it inside the lookup.
+            elif token.type == TokenType._TYPE:
+                expression += "(int(item_data['NTIPAliasType']))"
+            elif token.type == TokenType.EQ:
+                if tokens[i + 1].type != TokenType.NTIPAliasFlag:
+                    expression += "=="
+            elif token.type == TokenType.NE:
+                if tokens[i + 1].type != TokenType.NTIPAliasFlag:
+                    expression += "!="
+            elif token.type == TokenType.GT:
+                if tokens[i + 1].type != TokenType.NTIPAliasFlag:
+                    expression += ">"
+            elif token.type == TokenType.LT:
+                if tokens[i + 1].type != TokenType.NTIPAliasFlag:
+                    expression += "<"
+            elif token.type == TokenType.GE:
+                if tokens[i + 1].type != TokenType.NTIPAliasFlag:
+                    expression += ">="
+            elif token.type == TokenType.LE:
+                if tokens[i + 1].type != TokenType.NTIPAliasFlag:
+                    expression += "<="
+            elif token.type == TokenType.NUMBER:
+                expression += f"({token.value})"
+            elif token.type == TokenType.NUMBERPERCENT:
+                expression += f"int({token.value})"
+            else:
+                expression += f"{token.value}"
+                
+            expression += "" # add space if spaces are needed
+        return expression
 
 
-txt = "[name] == battleboots && [quality] == unique # [itemmagicbonus] == 50"
+    def transpile_nip_expression(self, expression: str):
+        if expression.startswith("//") or expression.startswith("-"):
+            return None
+        expression = expression.split("//")[0].rstrip() # ignore the comments
+        try:
+            lexer = Lexer(expression)
+            tokens = list(lexer.create_tokens())
+            return self.transpile(tokens)
+        except Exception as e:
+            print("\n[ERROR]", expression)
+            return
+
+
+    def transpile_nip_expressions(self, expressions):
+        transpiled_expressions = []
+        for expression in expressions:
+            transpiled_expression = self.transpile_nip_expression(expression)
+            if transpiled_expression:
+                transpiled_expressions.append(transpiled_expression)
+        return transpiled_expressions
 
 
 
 
 
-lexer = Lexer(txt)
-tokens = list(lexer.create_tokens())
-# print(tokens)
-# print(
-#     (int(item_data['NTIPAliasClassID']))==(NTIPAliasClassID['ring'])and(int(item_data['NTIPAliasQuality']))==(NTIPAliasQuality['unique'])and(int(item_data['NTIPAliasStat']['77']))==25.0#
-# )
+# x = transpile_nip_file("kolton.nip")
 
-expression = transpile(tokens)
+# write a transpiled.nip file with each expression on a new line
+
+# for i, expression in enumerate(x):
+#     with open("transpiled.nip", "a") as file:
+#         file.write(expression + "\n")
+
+
+
+text = "[name] == duskshroud && [quality] == unique && [flag] == ethereal # [passivecoldmastery] == 15 && [skillblizzard] == 3 //ormus"
+expression = Transpiler().transpile_nip_expression(text)
 print(expression)
 print(eval(expression))
+

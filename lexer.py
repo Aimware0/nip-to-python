@@ -31,7 +31,7 @@ class Lexer:
                 yield self.create_digits()
             elif self.current_token in WHITESPACE:
                 self.advance()
-                yield Token(TokenType.WHITESPACE, " ")
+                # yield Token(TokenType.WHITESPACE, " ")
             elif self.current_token in SYMBOLS:
                 yield self.create_logical_operator()
             elif self.current_token in MATH_SYMBOLS:
@@ -177,15 +177,21 @@ class Lexer:
             else:
                 print("Unknown operator")
                 break
+        
+        if char == "#":
+            return Token(TokenType.AND, "and")
+
         self.advance()
 
-txt = "[name] == ring # [vitality] == 5"
+txt = "# #"
 lexer = Lexer(txt)
 tokens = list(lexer.create_tokens())
 print(tokens)
 
 def transpile(tokens):
     expression = ""
+
+
     for i, token in enumerate(tokens):
         if token.type == TokenType.NTIPAliasStat:
             expression += f"NTIPAliasStat['{token.value}']"
@@ -195,25 +201,24 @@ def transpile(tokens):
             expression += f"NTIPAliasQuality['{token.value}']"
         elif token.type == TokenType.NTIPAliasClassID:
             expression += f"NTIPAliasClassID['{token.value}']"
-        elif token.type == TokenType.NTIPAliasFlag: # look into this
+        elif token.type == TokenType.NTIPAliasFlag:
             expression += f"NTIPAliasFlag['{token.value}']"
         elif token.type == TokenType.NTIPAliasType:
             expression += f"NTIPAliasType['{token.value}']"
-
         elif token.type == TokenType.NAME:
             expression += "item_data['Item']['NTIPAliasClassID']"
         elif token.type == TokenType.CLASS:
             expression += "item_data['Item']['NTIPAliasClass']"
         elif token.type == TokenType.QUALITY:
             expression += "item_data['Item']['NTIPAliasQuality']"
-        elif token.type == TokenType.FLAG: # LOOK INTO THIS TOO
-            if tokens[i + 4].type == TokenType.NTIPAliasFlag:
-                expression += f"item_data['Item']['NTIPAliasFlag']['{tokens[i + 4].value}']"
+        elif token.type == TokenType.FLAG:
+            if tokens[i + 2].type == TokenType.NTIPAliasFlag: 
+                expression += f"item_data['Item']['NTIPAliasFlag']['{tokens[i + 2].value}']"
         elif token.type == TokenType._TYPE:
             expression += "item_data['Item']['NTIPAliasType']"
         else:
             expression += f"{token.value}"
-            
+        expression += " "
     return expression
 
 

@@ -8,6 +8,114 @@ from NTIPAliasType import NTIPAliasType
 from tokens import Token, TokenType
 from enum import Enum
 
+import json
+
+
+
+item_data = json.loads("""{
+    "Name": "War Traveler",
+    "Quality": "unique",
+    "Text": "WAR TRAVELER|BATTLE BOOTS|DEFENSE: 139|DURABILITY: 13 OF 48|REQUIRED STRENGTH: 95|REQUIRED LEVEL: 42|+25% FASTER RUN/WALK|ADDS 15-25 DAMAGE|+190% ENHANCED DEFENSE|+10 TO STRENGTH|+10 TO VITALITY|40% SLOWER STAMINA DRAIN|ATTACKER TAKES DAMAGE OF 10|50% BETTER CHANCE OF GETTING MAGIC ITEMS",
+    "BaseItem":
+    {
+        "DisplayName": "Battle Boots",
+        "NTIPAliasClassID": 388,
+        "NTIPAliasType": 15,
+        "NTIPAliasStatProps":
+        {
+            "72": 18,
+            "73": 18,
+            "31":
+            {
+                "min": 39,
+                "max": 47
+            },
+            "0x400000":
+            {
+                "min": 0,
+                "max": 1
+            }
+        },
+        "dimensions": [2, 2],
+        "sets": ["ALDURSADVANCE"],
+        "uniques": ["WARTRAVELER"],
+        "NTIPAliasClass": 1
+    },
+    "Item":
+    {
+        "DisplayName": "War Traveler",
+        "NTIPAliasClassID": 388,
+        "NTIPAliasType": 15,
+        "NTIPAliasStatProps":
+        {
+            "3":
+            {
+                "min": 10,
+                "max": 10
+            },
+            "0":
+            {
+                "min": 10,
+                "max": 10
+            },
+            "80":
+            {
+                "min": 30,
+                "max": 50
+            },
+            "72": 30,
+            "73": 30,
+            "96":
+            {
+                "min": 25,
+                "max": 25
+            },
+            "16,0":
+            {
+                "min": 150,
+                "max": 190
+            },
+            "21": 15,
+            "22": 25,
+            "78":
+            {
+                "min": 5,
+                "max": 10
+            },
+            "154":
+            {
+                "min": 40,
+                "max": 40
+            }
+        }
+    },
+    "NTIPAliasType": 15,
+    "NTIPAliasClassID": 388,
+    "NTIPAliasClass": null,
+    "NTIPAliasQuality": 7,
+    "NTIPAliasStat":
+    {
+        "21": 15,
+        "22": 25,
+        "78": 10,
+        "31": 139,
+        "72": 13,
+        "73": 48,
+        "80": 50,
+        "0": 10,
+        "3": 10,
+        "16": 190,
+        "96": 25,
+        "154": 40
+    },
+    "NTIPAliasFlag":
+    {
+        "0x10": true,
+        "0x4000000": false
+    }
+}""")
+
+
 WHITESPACE = " \t\n\r\v\f"
 DIGITS = "0123456789."
 SYMBOLS = [">", "=> ", "<", "<=", "=", "!", "(", ")", ",", "&", "|", "#", "/"]
@@ -52,7 +160,6 @@ class Lexer:
                     break
                 dot_count += 1
             n_str += self.current_token
-            print(n_str)
             self.advance()
 
         if n_str.startswith("."):
@@ -187,10 +294,6 @@ class Lexer:
 
         self.advance()
 
-txt = "#"
-lexer = Lexer(txt)
-tokens = list(lexer.create_tokens())
-print(tokens)
 
 def transpile(tokens):
     expression = ""
@@ -210,20 +313,27 @@ def transpile(tokens):
         elif token.type == TokenType.NTIPAliasType:
             expression += f"NTIPAliasType['{token.value}']"
         elif token.type == TokenType.NAME:
-            expression += "item_data['Item']['NTIPAliasClassID']"
+            expression += "str(item_data['Item']['NTIPAliasClassID'])"
         elif token.type == TokenType.CLASS:
-            expression += "item_data['Item']['NTIPAliasClass']"
+            expression += "str(item_data['Item']['NTIPAliasClass'])"
         elif token.type == TokenType.QUALITY:
-            expression += "item_data['Item']['NTIPAliasQuality']"
+            expression += "str(item_data['NTIPAliasQuality'])"
         elif token.type == TokenType.FLAG:
             if tokens[i + 2].type == TokenType.NTIPAliasFlag: 
-                expression += f"item_data['Item']['NTIPAliasFlag']['{tokens[i + 2].value}']"
+                expression += f"str(item_data['NTIPAliasFlag']['{NTIPAliasFlag[tokens[i + 2].value]}'])"
         elif token.type == TokenType._TYPE:
-            expression += "item_data['Item']['NTIPAliasType']"
+            expression += "str(item_data['Item']['NTIPAliasType'])"
         else:
             expression += f"{token.value}"
         expression += " "
     return expression
 
 
-print(transpile(tokens))
+txt = "[flag] == ethereal"
+lexer = Lexer(txt)
+tokens = list(lexer.create_tokens())
+
+
+expression = transpile(tokens)
+print(expression)
+# print(eval(expression))

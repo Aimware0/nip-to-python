@@ -10,7 +10,7 @@ from enum import Enum
 
 WHITESPACE = " \t\n\r\v\f"
 DIGITS = "0123456789."
-SYMBOLS = [">", "=> ", "<", "<=", "=", "!", "(", ")", ",", "&", "|", "#"]
+SYMBOLS = [">", "=> ", "<", "<=", "=", "!", "(", ")", ",", "&", "|", "#", "/"]
 MATH_SYMBOLS = ["^", "*", "/", "\\", "+", "-"]
 CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
 
@@ -174,6 +174,10 @@ class Lexer:
                 if self.current_token == "|":
                     self.advance()
                     return Token(TokenType.OR, "or")
+            elif char == "/":
+                if self.current_token == "/":
+                    self.advance()
+                    return Token(TokenType.COMMENT, "#")
             else:
                 print("Unknown operator")
                 break
@@ -183,7 +187,7 @@ class Lexer:
 
         self.advance()
 
-txt = "# #"
+txt = "#"
 lexer = Lexer(txt)
 tokens = list(lexer.create_tokens())
 print(tokens)

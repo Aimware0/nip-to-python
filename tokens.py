@@ -34,9 +34,10 @@ class TokenType(Enum):
     QUALITY =            34
     CLASS =              35
     MAXQUANITY =         36
-    _TYPE =               37
+    _TYPE =              37
 
-    WHITESPACE =          38
+    WHITESPACE =         38
+    COMMENT =            39
 
 
 

@@ -294,14 +294,14 @@ class Lexer:
 
         self.advance()
 
+def percentage(value, min, max):
+    return ((value - min) * 100.0) / (max - min)
 
 def transpile(tokens):
     expression = ""
-
-
     for i, token in enumerate(tokens):
         if token.type == TokenType.NTIPAliasStat:
-            expression += f"NTIPAliasStat['{token.value}']"
+            expression += f"str(item_data['NTIPAliasStat']['{token.value}'])"
         elif token.type == TokenType.NTIPAliasClass:
             expression += f"NTIPAliasClass['{token.value}']"
         elif token.type == TokenType.NTIPAliasQuality:
@@ -309,7 +309,9 @@ def transpile(tokens):
         elif token.type == TokenType.NTIPAliasClassID:
             expression += f"NTIPAliasClassID['{token.value}']"
         elif token.type == TokenType.NTIPAliasFlag:
-            expression += f"NTIPAliasFlag['{token.value}']"
+            pass
+            # we don't need the flag value here, it's used below
+            # expression += f"NTIPAliasFlag['{token.value}']"
         elif token.type == TokenType.NTIPAliasType:
             expression += f"NTIPAliasType['{token.value}']"
         elif token.type == TokenType.NAME:
@@ -321,18 +323,40 @@ def transpile(tokens):
         elif token.type == TokenType.FLAG:
             if tokens[i + 2].type == TokenType.NTIPAliasFlag: 
                 expression += f"str(item_data['NTIPAliasFlag']['{NTIPAliasFlag[tokens[i + 2].value]}'])"
+            # Check if the flag we're looking for (i.e ethereal) is i + 2 away from here, if it is, grab it's value (0x400000) and place it inside the lookup.
         elif token.type == TokenType._TYPE:
             expression += "str(item_data['Item']['NTIPAliasType'])"
+        
+        elif token.type == TokenType.EQ:
+            if tokens[i +1].type != TokenType.NTIPAliasFlag:
+                expression += "=="
+        elif token.type == TokenType.NE:
+            if tokens[i +1].type != TokenType.NTIPAliasFlag:
+                expression += "!="
+        elif token.type == TokenType.GT:
+            if tokens[i +1].type != TokenType.NTIPAliasFlag:
+                expression += ">"
+        elif token.type == TokenType.LT:
+            if tokens[i +1].type != TokenType.NTIPAliasFlag:
+                expression += "<"
+        elif token.type == TokenType.GE:
+            if tokens[i +1].type != TokenType.NTIPAliasFlag:
+                expression += ">="
+        elif token.type == TokenType.LE:
+            if tokens[i +1].type != TokenType.NTIPAliasFlag:
+                expression += "<="
+
         else:
             expression += f"{token.value}"
         expression += " "
     return expression
 
 
-txt = "[flag] == ethereal"
+txt = "[flag] == identified # [defense] == 213 "
 lexer = Lexer(txt)
 tokens = list(lexer.create_tokens())
 
+str(item_data['NTIPAliasStat']['0'] * 0.5) == 50.0 
 
 expression = transpile(tokens)
 print(expression)

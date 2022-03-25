@@ -3,41 +3,42 @@ from dataclasses import dataclass
 
 class TokenType(Enum):
     NUMBER =              1
-    PLUS =                2
-    MINUS =               3
-    MULTIPLY =            4
-    DIVIDE =              5
-    MODULO =              6
-    POW =                 7
-    LPAREN =              8
-    RPAREN =              9
+    NUMBERPERCENT =       2
+    PLUS =                3
+    MINUS =               4
+    MULTIPLY =            5
+    DIVIDE =              6
+    MODULO =              7
+    POW =                 8
+    LPAREN =              9
+    RPAREN =              10
     
-    GT =                  10
-    LT =                  11
-    LE =                  12
-    GE =                  13
-    EQ =                  14
-    NE =                  15
-    AND =                16
-    OR =                 17
+    GT =                  11
+    LT =                  12
+    LE =                  13
+    GE =                  14
+    EQ =                  15
+    NE =                  16
+    AND =                 17
+    OR =                  18
 
-    NTIPAliasClass =     18
-    NTIPAliasClassID =   19
-    NTIPAliasFlag =      20
-    NTIPAliasQuality =   21
-    NTIPAliasStat =      22
-    NTIPAliasType =      23
-    NTIPAlias =          24
+    NTIPAliasClass =      19
+    NTIPAliasClassID =    20
+    NTIPAliasFlag =       21
+    NTIPAliasQuality =    22
+    NTIPAliasStat =       23
+    NTIPAliasType =       24
+    NTIPAlias =           25
 
-    NAME =               32
-    FLAG =               33
-    QUALITY =            34
-    CLASS =              35
-    MAXQUANITY =         36
-    _TYPE =              37
+    NAME =                26
+    FLAG =                27
+    QUALITY =             28
+    CLASS =               29
+    MAXQUANITY =          30
+    _TYPE =               31
 
-    WHITESPACE =         38
-    COMMENT =            39
+    WHITESPACE =          32
+    COMMENT =             33
 
 
 

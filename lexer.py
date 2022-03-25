@@ -13,113 +13,106 @@ import json
 
 
 item_data = json.loads("""{
-    "Name": "War Traveler",
-    "Quality": "unique",
-    "Text": "WAR TRAVELER|BATTLE BOOTS|DEFENSE: 139|DURABILITY: 13 OF 48|REQUIRED STRENGTH: 95|REQUIRED LEVEL: 42|+25% FASTER RUN/WALK|ADDS 15-25 DAMAGE|+190% ENHANCED DEFENSE|+10 TO STRENGTH|+10 TO VITALITY|40% SLOWER STAMINA DRAIN|ATTACKER TAKES DAMAGE OF 10|50% BETTER CHANCE OF GETTING MAGIC ITEMS",
-    "BaseItem":
-    {
-        "DisplayName": "Battle Boots",
-        "NTIPAliasClassID": 388,
-        "NTIPAliasType": 15,
-        "NTIPAliasStatProps":
-        {
-            "72": 18,
-            "73": 18,
-            "31":
-            {
-                "min": 39,
-                "max": 47
-            },
-            "0x400000":
-            {
-                "min": 0,
-                "max": 1
-            }
-        },
-        "dimensions": [2, 2],
-        "sets": ["ALDURSADVANCE"],
-        "uniques": ["WARTRAVELER"],
-        "NTIPAliasClass": 1
-    },
-    "Item":
-    {
-        "DisplayName": "War Traveler",
-        "NTIPAliasClassID": 388,
-        "NTIPAliasType": 15,
-        "NTIPAliasStatProps":
-        {
-            "3":
-            {
-                "min": 10,
-                "max": 10
-            },
-            "0":
-            {
-                "min": 10,
-                "max": 10
-            },
-            "80":
-            {
-                "min": 30,
-                "max": 50
-            },
-            "72": 30,
-            "73": 30,
-            "96":
-            {
-                "min": 25,
-                "max": 25
-            },
-            "16,0":
-            {
-                "min": 150,
-                "max": 190
-            },
-            "21": 15,
-            "22": 25,
-            "78":
-            {
-                "min": 5,
-                "max": 10
-            },
-            "154":
-            {
-                "min": 40,
-                "max": 40
-            }
-        }
-    },
-    "NTIPAliasType": 15,
+  "Name": "War Traveler",
+  "Quality": "unique",
+  "Text": "WAR TRAVELER|BATTLE BOOTS|DEFENSE: 139|DURABILITY: 13 OF 48|REQUIRED STRENGTH: 95|REQUIRED LEVEL: 42|+25% FASTER RUN/WALK|ADDS 15-25 DAMAGE|+190% ENHANCED DEFENSE|+10 TO STRENGTH|+10 TO VITALITY|40% SLOWER STAMINA DRAIN|ATTACKER TAKES DAMAGE OF 10|50% BETTER CHANCE OF GETTING MAGIC ITEMS",
+  "BaseItem": {
+    "DisplayName": "Battle Boots",
     "NTIPAliasClassID": 388,
-    "NTIPAliasClass": null,
-    "NTIPAliasQuality": 7,
-    "NTIPAliasStat":
-    {
-        "21": 15,
-        "22": 25,
-        "78": 10,
-        "31": 139,
-        "72": 13,
-        "73": 48,
-        "80": 50,
-        "0": 10,
-        "3": 10,
-        "16": 190,
-        "96": 25,
-        "154": 40
+    "NTIPAliasType": 15,
+    "NTIPAliasStatProps": {
+      "31": {
+        "min": 39,
+        "max": 47
+      },
+      "72": 18,
+      "73": 18,
+      "0x400000": {
+        "min": 0,
+        "max": 1
+      }
     },
-    "NTIPAliasFlag":
-    {
-        "0x10": true,
-        "0x4000000": false
+    "dimensions": [
+      2,
+      2
+    ],
+    "sets": [
+      "ALDURSADVANCE"
+    ],
+    "uniques": [
+      "WARTRAVELER"
+    ],
+    "NTIPAliasClass": 1
+  },
+  "Item": {
+    "DisplayName": "War Traveler",
+    "NTIPAliasClassID": 388,
+    "NTIPAliasType": 15,
+    "NTIPAliasStatProps": {
+      "0": {
+        "min": 10,
+        "max": 10
+      },
+      "3": {
+        "min": 10,
+        "max": 10
+      },
+      "21": 15,
+      "22": 25,
+      "72": 30,
+      "73": 30,
+      "78": {
+        "min": 5,
+        "max": 10
+      },
+      "80": {
+        "min": 30,
+        "max": 50
+      },
+      "96": {
+        "min": 25,
+        "max": 25
+      },
+      "154": {
+        "min": 40,
+        "max": 40
+      },
+      "16,0": {
+        "min": 150,
+        "max": 190
+      }
     }
+  },
+  "NTIPAliasType": 15,
+  "NTIPAliasClassID": 388,
+  "NTIPAliasClass": null,
+  "NTIPAliasQuality": 7,
+  "NTIPAliasStat": {
+    "0": 10,
+    "3": 10,
+    "16": 190,
+    "21": 15,
+    "22": 25,
+    "31": 139,
+    "72": 13,
+    "73": 48,
+    "78": 10,
+    "80": 50,
+    "96": 25,
+    "154": 40
+  },
+  "NTIPAliasFlag": {
+    "0x10": true,
+    "0x4000000": false
+  }
 }""")
 
 
+
 WHITESPACE = " \t\n\r\v\f"
-DIGITS = "0123456789."
+DIGITS = "0123456789.%"
 SYMBOLS = [">", "=> ", "<", "<=", "=", "!", "(", ")", ",", "&", "|", "#", "/"]
-MATH_SYMBOLS = ["^", "*", "/", "\\", "+", "-"]
+MATH_SYMBOLS = ["(", ")", "^", "*", "/", "\\", "+", "-"]
 CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
 
 class Lexer:
@@ -154,18 +147,25 @@ class Lexer:
         dot_count = 0
         n_str = self.current_token
         self.advance()
-        while self.current_token != None and (self.current_token.isdigit() or self.current_token == "."):
+        while self.current_token != None and self.current_token in DIGITS:
             if self.current_token == ".":
                 if dot_count >= 1:
                     break
                 dot_count += 1
+
             n_str += self.current_token
+            
+            if self.current_token == "%":
+                self.advance()
+                break
             self.advance()
 
         if n_str.startswith("."):
             n_str = "0" + n_str
         elif n_str.endswith("."):
             n_str = n_str + "0"
+        elif n_str.endswith("%"):
+            return Token(TokenType.NUMBERPERCENT, n_str[:-1])
 
         return Token(TokenType.NUMBER, float(n_str))
 
@@ -186,6 +186,10 @@ class Lexer:
                 return Token(TokenType.MODULO, symbol)
             elif symbol == "^":
                 return Token(TokenType.POW, symbol)
+            elif symbol == "(":
+                return Token(TokenType.LPAREN, symbol)
+            elif symbol == ")":
+                return Token(TokenType.RPAREN, symbol)
             
     def create_nip_lookup(self):
         self.advance()
@@ -284,48 +288,63 @@ class Lexer:
             elif char == "/":
                 if self.current_token == "/":
                     self.advance()
-                    return Token(TokenType.COMMENT, "#")
+                    return Token(TokenType.COMMENT, "") # We don't really need comments in the transpiled version...
             else:
-                print("Unknown operator")
+                print("Unknown operator", char)
                 break
         
         if char == "#":
             return Token(TokenType.AND, "and")
+        elif char == "(":
+            return Token(TokenType.LPAREN, char)
+        elif char == ")":
+            return Token(TokenType.RPAREN, char)
 
         self.advance()
 
-def percentage(value, min, max):
-    return ((value - min) * 100.0) / (max - min)
+
 
 def transpile(tokens):
     expression = ""
     for i, token in enumerate(tokens):
+        if token == None:
+            continue
         if token.type == TokenType.NTIPAliasStat:
-            expression += f"str(item_data['NTIPAliasStat']['{token.value}'])"
+            if len(tokens) >= 2 and tokens[i + 2].type == TokenType.NUMBERPERCENT: # Look at the other side of the comparsion.
+                stat_value = f"(item_data['NTIPAliasStat']['{token.value}'])"
+                stat_min_max = f"(item_data['Item']['NTIPAliasStatProps']['{token.value}'])"
+                expression += f"(int(({stat_value} - {stat_min_max}['min']) * 100.0 / ({stat_min_max}['max'] - {stat_min_max}['min'])))"
+            else:
+                stat_value = f"(item_data['NTIPAliasStat']['{token.value}'])"
+                stat_min_max = f"(item_data['Item']['NTIPAliasStatProps']['{token.value}'])"
+                # clamp value between min and max
+                expression += f"((({stat_value} >= {stat_min_max}['max'] and {stat_min_max}['max']) or ({stat_value} <= {stat_min_max}['min'] and {stat_min_max}['min']) or {stat_value}))"
+
+                expression += f"(int(item_data['NTIPAliasStat']['{token.value}']))"
         elif token.type == TokenType.NTIPAliasClass:
-            expression += f"NTIPAliasClass['{token.value}']"
+            expression += f"(NTIPAliasClass['{token.value}'])"
         elif token.type == TokenType.NTIPAliasQuality:
-            expression += f"NTIPAliasQuality['{token.value}']"
+            expression += f"(NTIPAliasQuality['{token.value}'])"
         elif token.type == TokenType.NTIPAliasClassID:
-            expression += f"NTIPAliasClassID['{token.value}']"
+            expression += f"(NTIPAliasClassID['{token.value}'])"
         elif token.type == TokenType.NTIPAliasFlag:
             pass
             # we don't need the flag value here, it's used below
             # expression += f"NTIPAliasFlag['{token.value}']"
         elif token.type == TokenType.NTIPAliasType:
-            expression += f"NTIPAliasType['{token.value}']"
+            expression += f"(int(NTIPAliasType['{token.value}']))"
         elif token.type == TokenType.NAME:
-            expression += "str(item_data['Item']['NTIPAliasClassID'])"
+            expression += "(int(item_data['NTIPAliasClassID']))"
         elif token.type == TokenType.CLASS:
-            expression += "str(item_data['Item']['NTIPAliasClass'])"
+            expression += "(int(item_data['NTIPAliasClass']))"
         elif token.type == TokenType.QUALITY:
-            expression += "str(item_data['NTIPAliasQuality'])"
+            expression += "(int(item_data['NTIPAliasQuality']))"
         elif token.type == TokenType.FLAG:
             if tokens[i + 2].type == TokenType.NTIPAliasFlag: 
-                expression += f"str(item_data['NTIPAliasFlag']['{NTIPAliasFlag[tokens[i + 2].value]}'])"
+                expression += f"(item_data['NTIPAliasFlag']['{NTIPAliasFlag[tokens[i + 2].value]}'])"
             # Check if the flag we're looking for (i.e ethereal) is i + 2 away from here, if it is, grab it's value (0x400000) and place it inside the lookup.
         elif token.type == TokenType._TYPE:
-            expression += "str(item_data['Item']['NTIPAliasType'])"
+            expression += "(int(item_data['NTIPAliasType']))"
         
         elif token.type == TokenType.EQ:
             if tokens[i +1].type != TokenType.NTIPAliasFlag:
@@ -345,19 +364,28 @@ def transpile(tokens):
         elif token.type == TokenType.LE:
             if tokens[i +1].type != TokenType.NTIPAliasFlag:
                 expression += "<="
-
+        elif token.type == TokenType.NUMBERPERCENT:
+            expression += f"int({token.value})"
         else:
             expression += f"{token.value}"
-        expression += " "
+            
+        expression += "" # add space if spaces are needed
     return expression
 
 
-txt = "[flag] == identified # [defense] == 213 "
+txt = "[name] == battleboots && [quality] == unique # [itemmagicbonus] == 50"
+
+
+
+
+
 lexer = Lexer(txt)
 tokens = list(lexer.create_tokens())
-
-str(item_data['NTIPAliasStat']['0'] * 0.5) == 50.0 
+# print(tokens)
+# print(
+#     (int(item_data['NTIPAliasClassID']))==(NTIPAliasClassID['ring'])and(int(item_data['NTIPAliasQuality']))==(NTIPAliasQuality['unique'])and(int(item_data['NTIPAliasStat']['77']))==25.0#
+# )
 
 expression = transpile(tokens)
 print(expression)
-# print(eval(expression))
+print(eval(expression))
